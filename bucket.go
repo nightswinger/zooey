@@ -98,3 +98,13 @@ func (b *Bucket) PutObject(name string, buf *bytes.Buffer) (*s3.PutObjectOutput,
 	}
 	return resp, err
 }
+
+func (b *Bucket) IsExist(key string) bool {
+	out, _ := b.List()
+	for _, item := range out.Contents {
+		if *item.Key == key {
+			return true
+		}
+	}
+	return false
+}
