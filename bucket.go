@@ -1,7 +1,7 @@
 package zooey
 
 import (
-	"io"
+	"bytes"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -79,9 +79,9 @@ func (b *Bucket) GetObject(key string, options ...GetObjectOptions) (*s3.GetObje
 	return resp, err
 }
 
-func (b *Bucket) PutObject(name string, obj io.Reader) (*s3.PutObjectOutput, error) {
+func (b *Bucket) PutObject(name string, buf *bytes.Buffer) (*s3.PutObjectOutput, error) {
 	input := &s3.PutObjectInput{
-		Body:   aws.ReadSeekCloser(obj),
+		Body:   bytes.NewReader(buf.Bytes()),
 		Bucket: &b.name,
 		Key:    &name,
 	}
